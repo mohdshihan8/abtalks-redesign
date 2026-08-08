@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Flame,
@@ -32,6 +32,7 @@ export default function DayPage() {
   const dayId = parseInt(params.id as string) || 12;
   
   const [nightMode, setNightMode] = useState(false);
+  const [showNightSuggestion, setShowNightSuggestion] = useState(false);
   const [focusMode, setFocusMode] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [githubUrl, setGithubUrl] = useState('');
@@ -40,6 +41,13 @@ export default function DayPage() {
   const [showHints, setShowHints] = useState(false);
   
   const student = currentStudent;
+    // Auto-detect late night usage
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour >= 21 || hour < 6) {
+      setShowNightSuggestion(true);
+    }
+  }, []);
   const task = dayTasks['Web Development'][0]; // Using day 12 task
   const isToday = dayId === student.currentDay;
   const alreadySubmitted = student.submissions.some(s => s.day === dayId);
@@ -226,7 +234,28 @@ export default function DayPage() {
             </div>
           </div>
         )}
-
+        {/* Auto Night Mode Suggestion */}
+        {showNightSuggestion && !nightMode && (
+          <div className="bg-[#1e3a5f] rounded-2xl p-4 flex items-start gap-3 text-white">
+            <Moon className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-medium">It's late — building in the dark?</p>
+              <p className="text-blue-200 text-xs mt-0.5">Switch to Night Mode for easier on the eyes.</p>
+            </div>
+            <button 
+              onClick={() => { setNightMode(true); setShowNightSuggestion(false); }}
+              className="bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium px-3 py-1.5 rounded-xl transition-colors"
+            >
+              Switch
+            </button>
+            <button 
+              onClick={() => setShowNightSuggestion(false)}
+              className="text-blue-300 text-xs hover:text-white transition-colors"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
         {/* Missed Day Banner */}
         {isMissed && (
           <div className="bg-red-50 border border-red-200 rounded-2xl p-4 flex items-start gap-3">
