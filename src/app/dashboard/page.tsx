@@ -197,11 +197,12 @@ export default function DashboardPage() {
             <Calendar className="w-5 h-5 text-[#1e3a5f]" />
             <span className={`font-semibold text-sm ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>Your Journey</span>
           </div>
-          <div className="grid grid-cols-10 gap-1.5">
+                    <div className="grid grid-cols-10 gap-1.5">
             {calendarDays.slice(0, 40).map((day) => (
-              <div
+              <Link
                 key={day.day}
-                className={`aspect-square rounded-md text-[8px] flex items-center justify-center font-medium ${
+                href={`/day/${day.day}`}
+                className={`aspect-square rounded-md text-[8px] flex items-center justify-center font-medium transition-transform active:scale-90 ${
                   day.isToday
                     ? 'bg-[#f97316] text-white ring-2 ring-[#f97316]/30'
                     : day.isSubmitted
@@ -214,7 +215,7 @@ export default function DashboardPage() {
                 }`}
               >
                 {day.day}
-              </div>
+              </Link>
             ))}
           </div>
           <div className="flex items-center gap-4 mt-3 text-[10px]">
