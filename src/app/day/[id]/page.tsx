@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import BottomNav from '@/components/BottomNav';
 import {
   Flame,
   GitCommit,
