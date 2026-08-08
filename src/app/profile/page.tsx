@@ -1,5 +1,6 @@
 'use client';
 
+import BottomNav from '@/components/BottomNav';
 import { useState } from 'react';
 import Link from 'next/link';
 import {
@@ -133,24 +134,8 @@ export default function ProfilePage() {
         </div>
 
         {/* Bottom Navigation */}
-        <nav className={`fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} border-t ${nightMode ? 'border-slate-700' : 'border-gray-100'} px-6 py-3 flex justify-between items-center z-50`}>
-          <Link href="/dashboard" className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
-            <Home className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Home</span>
-          </Link>
-          <Link href={`/day/${student.currentDay}`} className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
-            <Target className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Today</span>
-          </Link>
-          <Link href="/" className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
-            <Trophy className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Leaderboard</span>
-          </Link>
-          <Link href="/profile" className="flex flex-col items-center gap-1 text-[#f97316]">
-            <User className="w-5 h-5" />
-            <span className="text-[10px] font-medium">Profile</span>
-          </Link>
-        </nav>
+                {/* Bottom Navigation */}
+        <BottomNav nightMode={nightMode} activeTab="profile" currentDay={student.currentDay} />
       </main>
     );
   }
@@ -276,24 +261,7 @@ export default function ProfilePage() {
       </div>
 
       {/* Bottom Navigation */}
-      <nav className={`fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} border-t ${nightMode ? 'border-slate-700' : 'border-gray-100'} px-6 py-3 flex justify-between items-center z-50`}>
-        <Link href="/dashboard" className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
-          <Home className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Home</span>
-        </Link>
-        <Link href={`/day/${student.currentDay}`} className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
-          <Target className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Today</span>
-        </Link>
-        <Link href="/" className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
-          <Trophy className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Leaderboard</span>
-        </Link>
-        <Link href="/profile" className="flex flex-col items-center gap-1 text-[#f97316]">
-          <User className="w-5 h-5" />
-          <span className="text-[10px] font-medium">Profile</span>
-        </Link>
-      </nav>
+      <BottomNav nightMode={nightMode} activeTab="profile" currentDay={student.currentDay} />
     </main>
   );
 }
