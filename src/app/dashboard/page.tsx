@@ -276,7 +276,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Bottom Navigation */}
-      <nav className={`fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} border-t ${nightMode ? 'border-slate-700' : 'border-gray-100'} px-6 py-3 flex justify-between items-center z-50`}>
+      <nav className={`fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} border-t ${nightMode ? 'border-slate-700' : 'border-gray-100'} px-6 py-3 flex justify-between items-center pointer-events-auto`} style={{paddingBottom: 'env(safe-area-inset-bottom, 12px)', zIndex: 99999}}>
         <Link href="/dashboard" className="flex flex-col items-center gap-1 text-[#f97316]">
           <Home className="w-5 h-5" />
           <span className="text-[10px] font-medium">Home</span>
@@ -289,10 +289,10 @@ export default function DashboardPage() {
           <Trophy className="w-5 h-5" />
           <span className="text-[10px] font-medium">Leaderboard</span>
         </Link>
-        <div className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
+        <Link href="/profile" className={`flex flex-col items-center gap-1 relative z-50 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`} aria-label="Profile">
           <User className="w-5 h-5" />
           <span className="text-[10px] font-medium">Profile</span>
-        </div>
+        </Link>
       </nav>
     </main>
   );

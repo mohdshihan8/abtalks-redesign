@@ -37,3 +37,31 @@
     box-shadow: 0 4px 20px rgba(30, 58, 95, 0.12);
   }
 }
+
+/* Dark mode variables and RTL helpers */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg: #071029;
+    --color-surface: #071829;
+    --color-text: #e6eef8;
+    --color-text-muted: #9fb0c6;
+    --color-border: #15303f;
+  }
+}
+
+:root[dir="rtl"] {
+  /* simple helpers so components can use logical properties */
+  --flow-start: right;
+  --flow-end: left;
+}
+
+@layer utilities {
+  .rtl \:text-right {
+    direction: rtl;
+  }
+
+  .prefers-reduced-motion {
+    transition: none !important;
+    animation: none !important;
+  }
+}
