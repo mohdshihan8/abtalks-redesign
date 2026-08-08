@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion } from 'framer-motion';
 import {
   Flame,
   GitCommit,
@@ -30,7 +31,6 @@ export default function DashboardPage() {
   const hasMissedDay = student.missedDays.length > 0;
   const lastMissed = hasMissedDay ? Math.max(...student.missedDays) : null;
   
-  // Auto-detect late night usage
   useEffect(() => {
     const hour = new Date().getHours();
     if (hour >= 21 || hour < 6) {
@@ -51,6 +51,19 @@ export default function DashboardPage() {
     if (student.streak < 7) return `${student.streak} days — keep building!`;
     if (student.streak < 14) return "You're on fire!";
     return "Unstoppable streak!";
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
   };
 
   return (
@@ -74,17 +87,21 @@ export default function DashboardPage() {
             {nightMode ? <Sun className="w-5 h-5 text-amber-400" /> : <Moon className="w-5 h-5 text-blue-200" />}
           </button>
         </div>
-        
         <div className="flex items-center gap-2 text-sm text-blue-100">
           <span className="bg-white/10 rounded-full px-2.5 py-1 text-xs">{student.college}</span>
           <span className="bg-white/10 rounded-full px-2.5 py-1 text-xs">{student.track}</span>
         </div>
       </header>
 
-      <div className="px-5 mt-5 space-y-4">
+      <motion.div 
+        className="px-5 mt-5 space-y-4"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         {/* Auto Night Mode Suggestion */}
         {showNightSuggestion && !nightMode && (
-          <div className="bg-[#1e3a5f] rounded-2xl p-4 flex items-start gap-3 text-white">
+          <motion.div variants={cardVariants} className="bg-[#1e3a5f] rounded-2xl p-4 flex items-start gap-3 text-white">
             <Moon className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className="text-sm font-medium">It's late — building in the dark?</p>
@@ -102,11 +119,11 @@ export default function DashboardPage() {
             >
               Dismiss
             </button>
-          </div>
+          </motion.div>
         )}
 
         {/* Streak Card */}
-        <div className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
+        <motion.div variants={cardVariants} className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Flame className="w-5 h-5 text-[#f97316]" />
@@ -116,19 +133,14 @@ export default function DashboardPage() {
           </div>
           <p className={`text-xs mb-3 ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>{getStreakMessage()}</p>
           <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-[#f97316] rounded-full transition-all"
-              style={{ width: `${Math.min((student.streak / 60) * 100, 100)}%` }}
-            />
+            <div className="h-full bg-[#f97316] rounded-full transition-all" style={{ width: `${Math.min((student.streak / 60) * 100, 100)}%` }} />
           </div>
-          <p className={`text-[10px] mt-1.5 ${nightMode ? 'text-slate-500' : 'text-[#94a3b8]'}`}>
-            Longest: {student.longestStreak} days
-          </p>
-        </div>
+          <p className={`text-[10px] mt-1.5 ${nightMode ? 'text-slate-500' : 'text-[#94a3b8]'}`}>Longest: {student.longestStreak} days</p>
+        </motion.div>
 
         {/* Missed Day Recovery Banner */}
         {hasMissedDay && (
-          <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
+          <motion.div variants={cardVariants} className="bg-amber-50 border border-amber-200 rounded-2xl p-4 flex items-start gap-3">
             <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
             <div className="flex-1">
               <p className="text-amber-800 text-sm font-medium">You missed Day {lastMissed}</p>
@@ -138,39 +150,37 @@ export default function DashboardPage() {
               <RotateCcw className="w-3 h-3" />
               Recover
             </button>
-          </div>
+          </motion.div>
         )}
 
         {/* Today's Task Card */}
-        <Link href={`/day/${student.currentDay}`} className="block">
-          <div className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm border-l-4 border-[#f97316]`}>
-            <div className="flex items-center justify-between mb-2">
-              <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${nightMode ? 'bg-orange-500/20 text-orange-400' : 'bg-orange-100 text-[#f97316]'}`}>
-                Day {student.currentDay} of {student.totalDays}
-              </span>
-              <ChevronRight className={`w-4 h-4 ${nightMode ? 'text-slate-500' : 'text-[#94a3b8]'}`} />
-            </div>
-            <h3 className={`font-bold text-base mb-1 ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>
-              Build a Responsive Pricing Page
-            </h3>
-            <p className={`text-xs ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>
-              Medium difficulty • Web Development
-            </p>
-            <div className="flex items-center gap-4 mt-3">
-              <div className="flex items-center gap-1.5">
-                <GitCommit className="w-3.5 h-3.5 text-[#22c55e]" />
-                <span className={`text-[10px] ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>GitHub</span>
+        <motion.div variants={cardVariants}>
+          <Link href={`/day/${student.currentDay}`} className="block">
+            <div className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm border-l-4 border-[#f97316]`}>
+              <div className="flex items-center justify-between mb-2">
+                <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${nightMode ? 'bg-orange-500/20 text-orange-400' : 'bg-orange-100 text-[#f97316]'}`}>
+                  Day {student.currentDay} of {student.totalDays}
+                </span>
+                <ChevronRight className={`w-4 h-4 ${nightMode ? 'text-slate-500' : 'text-[#94a3b8]'}`} />
               </div>
-              <div className="flex items-center gap-1.5">
-                <ExternalLink className="w-3.5 h-3.5 text-[#0a66c2]" />
-                <span className={`text-[10px] ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>LinkedIn</span>
+              <h3 className={`font-bold text-base mb-1 ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>Build a Responsive Pricing Page</h3>
+              <p className={`text-xs ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>Medium difficulty • Web Development</p>
+              <div className="flex items-center gap-4 mt-3">
+                <div className="flex items-center gap-1.5">
+                  <GitCommit className="w-3.5 h-3.5 text-[#22c55e]" />
+                  <span className={`text-[10px] ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>GitHub</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <ExternalLink className="w-3.5 h-3.5 text-[#0a66c2]" />
+                  <span className={`text-[10px] ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>LinkedIn</span>
+                </div>
               </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+        </motion.div>
 
         {/* Progress Section */}
-        <div className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
+        <motion.div variants={cardVariants} className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Target className="w-5 h-5 text-[#1e3a5f]" />
@@ -179,25 +189,22 @@ export default function DashboardPage() {
             <span className={`font-bold text-sm ${nightMode ? 'text-orange-400' : 'text-[#f97316]'}`}>{completionPercent}%</span>
           </div>
           <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
-            <div 
-              className="h-full bg-[#1e3a5f] rounded-full transition-all"
-              style={{ width: `${completionPercent}%` }}
-            />
+            <div className="h-full bg-[#1e3a5f] rounded-full transition-all" style={{ width: `${completionPercent}%` }} />
           </div>
           <div className="flex justify-between mt-2 text-[10px] text-[#94a3b8]">
             <span>Day 1</span>
             <span>Day 30</span>
             <span>Day 60</span>
           </div>
-        </div>
+        </motion.div>
 
         {/* Calendar Heatmap */}
-        <div className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
+        <motion.div variants={cardVariants} className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
           <div className="flex items-center gap-2 mb-3">
             <Calendar className="w-5 h-5 text-[#1e3a5f]" />
             <span className={`font-semibold text-sm ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>Your Journey</span>
           </div>
-                    <div className="grid grid-cols-10 gap-1.5">
+          <div className="grid grid-cols-10 gap-1.5">
             {calendarDays.slice(0, 40).map((day) => (
               <Link
                 key={day.day}
@@ -232,10 +239,10 @@ export default function DashboardPage() {
               <span className={nightMode ? 'text-slate-400' : 'text-[#64748b]'}>Missed</span>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Achievements */}
-        <div className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
+        <motion.div variants={cardVariants} className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Award className="w-5 h-5 text-[#f97316]" />
@@ -258,11 +265,10 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
-        </div>
+        </motion.div>
 
         {/* Mini Leaderboard */}
-        <div className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
-          <div className="flex items-center justify-between mb-3">
+        <motion.div variants={cardVariants} className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>          <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Trophy className="w-5 h-5 text-[#f97316]" />
               <span className={`font-semibold text-sm ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>Leaderboard</span>
@@ -305,8 +311,8 @@ export default function DashboardPage() {
               </div>
             ))}
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
       {/* Bottom Navigation */}
       <nav className={`fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} border-t ${nightMode ? 'border-slate-700' : 'border-gray-100'} px-6 py-3 flex justify-between items-center z-50`}>
