@@ -417,53 +417,53 @@ export default function DayPage() {
           </div>
         )}
 
-        {/* Success State */}
+                {/* Success State */}
         {submitted && (
-            <>
-          <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-              <CheckCircle2 className="w-8 h-8 text-green-600" />
+          <>
+            <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
+              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                <CheckCircle2 className="w-8 h-8 text-green-600" />
+              </div>
+              <h3 className="text-green-800 font-bold text-lg mb-1">Day {dayId} Submitted!</h3>
+              <p className="text-green-600 text-sm mb-4">Your streak is now {student.streak + 1} days. Keep building!</p>
+              <div className="flex gap-2 justify-center">
+                <a href={githubUrl} target="_blank" className="bg-[#1e3a5f] text-white text-xs font-medium px-4 py-2 rounded-xl flex items-center gap-1.5">
+                  <GitCommit className="w-3.5 h-3.5" />
+                  GitHub
+                </a>
+                <a href={linkedinUrl} target="_blank" className="bg-[#0a66c2] text-white text-xs font-medium px-4 py-2 rounded-xl flex items-center gap-1.5">
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  LinkedIn
+                </a>
+              </div>
+              <Link 
+                href="/dashboard"
+                className="block mt-4 text-green-700 text-sm font-medium"
+              >
+                Back to Dashboard
+              </Link>
             </div>
-            <h3 className="text-green-800 font-bold text-lg mb-1">Day {dayId} Submitted!</h3>
-            <p className="text-green-600 text-sm mb-4">Your streak is now {student.streak + 1} days. Keep building!</p>
-            <div className="flex gap-2 justify-center">
-              <a href={githubUrl} target="_blank" className="bg-[#1e3a5f] text-white text-xs font-medium px-4 py-2 rounded-xl flex items-center gap-1.5">
-                <GitCommit className="w-3.5 h-3.5" />
-                GitHub
-              </a>
-              <a href={linkedinUrl} target="_blank" className="bg-[#0a66c2] text-white text-xs font-medium px-4 py-2 rounded-xl flex items-center gap-1.5">
-                <ExternalLink className="w-3.5 h-3.5" />
-                LinkedIn
-              </a>
+            
+            {/* Next Day Preview */}
+            <div className={`rounded-2xl p-5 mt-4 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm border-l-4 border-[#1e3a5f]`}>
+              <p className={`text-[10px] font-medium uppercase tracking-wider mb-2 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
+                Coming Up Tomorrow
+              </p>
+              <h3 className={`font-bold text-base mb-1 ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>
+                Build a Contact Form with Validation
+              </h3>
+              <p className={`text-xs ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>
+                Day {dayId + 1} of 60 • Medium difficulty
+              </p>
+              <div className="flex items-center gap-2 mt-3">
+                <span className={`text-[10px] px-2 py-1 rounded-full ${nightMode ? 'bg-slate-800 text-slate-300' : 'bg-[#f8fafc] text-[#64748b]'}`}>
+                  React Hook Form
+                </span>
+                <span className={`text-[10px] px-2 py-1 rounded-full ${nightMode ? 'bg-slate-800 text-slate-300' : 'bg-[#f8fafc] text-[#64748b]'}`}>
+                  Zod Validation
+                </span>
+              </div>
             </div>
-                        <Link 
-              href="/dashboard"
-              className="block mt-4 text-green-700 text-sm font-medium"
-            >
-              Back to Dashboard
-            </Link>
-          </div>
-          
-          {/* Next Day Preview */}
-          <div className={`rounded-2xl p-5 mt-4 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm border-l-4 border-[#1e3a5f]`}>
-            <p className={`text-[10px] font-medium uppercase tracking-wider mb-2 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
-              Coming Up Tomorrow
-            </p>
-            <h3 className={`font-bold text-base mb-1 ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>
-              Build a Contact Form with Validation
-            </h3>
-            <p className={`text-xs ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>
-              Day {dayId + 1} of 60 • Medium difficulty
-            </p>
-            <div className="flex items-center gap-2 mt-3">
-              <span className={`text-[10px] px-2 py-1 rounded-full ${nightMode ? 'bg-slate-800 text-slate-300' : 'bg-[#f8fafc] text-[#64748b]'}`}>
-                React Hook Form
-              </span>
-              <span className={`text-[10px] px-2 py-1 rounded-full ${nightMode ? 'bg-slate-800 text-slate-300' : 'bg-[#f8fafc] text-[#64748b]'}`}>
-                Zod Validation
-              </span>
-            </div>
-          </div>
           </>
         )}
       </div>
