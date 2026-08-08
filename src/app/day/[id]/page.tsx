@@ -503,8 +503,7 @@ export default function DayPage() {
           <Home className="w-5 h-5" />
           <span className="text-[10px] font-medium">Home</span>
         </Link>
-        <Link href={`/day/${student.currentDay}`} className="flex flex-col items-center gap-1 text-[#f97316]">
-          <Target className="w-5 h-5" />
+<Link href={`/day/${student.currentDay}`} className="block">          <Target className="w-5 h-5" />
           <span className="text-[10px] font-medium">Today</span>
         </Link>
         <Link href="/" className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>

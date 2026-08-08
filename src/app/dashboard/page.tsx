@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import {
   Flame,
@@ -23,11 +23,20 @@ import { currentStudent, leaderboard } from '@/data/mockData';
 
 export default function DashboardPage() {
   const [nightMode, setNightMode] = useState(false);
+  const [showNightSuggestion, setShowNightSuggestion] = useState(false);
   const student = currentStudent;
   
   const completionPercent = Math.round((student.currentDay / student.totalDays) * 100);
   const hasMissedDay = student.missedDays.length > 0;
   const lastMissed = hasMissedDay ? Math.max(...student.missedDays) : null;
+  
+  // Auto-detect late night usage
+  useEffect(() => {
+    const hour = new Date().getHours();
+    if (hour >= 21 || hour < 6) {
+      setShowNightSuggestion(true);
+    }
+  }, []);
   
   const calendarDays = Array.from({ length: 60 }, (_, i) => {
     const dayNum = i + 1;
@@ -45,7 +54,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <main className={`min-h-screen pb-24 transition-colors ${nightMode ? 'bg-[#0f172a]' : 'bg-[#f0f4f8]'}`}>
+    <main className={`min-h-screen pb-28 transition-colors ${nightMode ? 'bg-[#0f172a]' : 'bg-[#f0f4f8]'}`}>
       {/* Header */}
       <header className={`px-5 pt-6 pb-4 ${nightMode ? 'bg-[#1e293b]' : 'bg-[#1e3a5f]'} rounded-b-[28px]`}>
         <div className="flex items-center justify-between mb-4">
@@ -73,6 +82,29 @@ export default function DashboardPage() {
       </header>
 
       <div className="px-5 mt-5 space-y-4">
+        {/* Auto Night Mode Suggestion */}
+        {showNightSuggestion && !nightMode && (
+          <div className="bg-[#1e3a5f] rounded-2xl p-4 flex items-start gap-3 text-white">
+            <Moon className="w-5 h-5 text-amber-300 shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-medium">It's late — building in the dark?</p>
+              <p className="text-blue-200 text-xs mt-0.5">Switch to Night Mode for easier on the eyes.</p>
+            </div>
+            <button 
+              onClick={() => { setNightMode(true); setShowNightSuggestion(false); }}
+              className="bg-amber-500 hover:bg-amber-600 text-white text-xs font-medium px-3 py-1.5 rounded-xl transition-colors"
+            >
+              Switch
+            </button>
+            <button 
+              onClick={() => setShowNightSuggestion(false)}
+              className="text-blue-300 text-xs hover:text-white transition-colors"
+            >
+              Dismiss
+            </button>
+          </div>
+        )}
+
         {/* Streak Card */}
         <div className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm`}>
           <div className="flex items-center justify-between mb-3">
@@ -110,7 +142,7 @@ export default function DashboardPage() {
         )}
 
         {/* Today's Task Card */}
-        <Link href={`/day/${student.currentDay}`}>
+        <Link href={`/day/${student.currentDay}`} className="block">
           <div className={`rounded-2xl p-5 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm border-l-4 border-[#f97316]`}>
             <div className="flex items-center justify-between mb-2">
               <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${nightMode ? 'bg-orange-500/20 text-orange-400' : 'bg-orange-100 text-[#f97316]'}`}>
@@ -276,7 +308,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Bottom Navigation */}
-      <nav className={`fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} border-t ${nightMode ? 'border-slate-700' : 'border-gray-100'} px-6 py-3 flex justify-between items-center pointer-events-auto`} style={{paddingBottom: 'env(safe-area-inset-bottom, 12px)', zIndex: 99999}}>
+      <nav className={`fixed bottom-0 left-0 right-0 max-w-[430px] mx-auto ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} border-t ${nightMode ? 'border-slate-700' : 'border-gray-100'} px-6 py-3 flex justify-between items-center z-50`}>
         <Link href="/dashboard" className="flex flex-col items-center gap-1 text-[#f97316]">
           <Home className="w-5 h-5" />
           <span className="text-[10px] font-medium">Home</span>
@@ -289,7 +321,7 @@ export default function DashboardPage() {
           <Trophy className="w-5 h-5" />
           <span className="text-[10px] font-medium">Leaderboard</span>
         </Link>
-        <Link href="/profile" className={`flex flex-col items-center gap-1 relative z-50 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`} aria-label="Profile">
+        <Link href="/profile" className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
           <User className="w-5 h-5" />
           <span className="text-[10px] font-medium">Profile</span>
         </Link>
