@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { currentStudent, dayTasks } from '@/data/mockData';
 import { useParams } from 'next/navigation';
+import confetti from 'canvas-confetti';
 
 export default function DayPage() {
   const params = useParams();
@@ -44,10 +45,36 @@ export default function DayPage() {
   const alreadySubmitted = student.submissions.some(s => s.day === dayId);
   const isMissed = student.missedDays.includes(dayId);
 
-  const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (githubUrl && linkedinUrl) {
       setSubmitted(true);
+      
+      // Confetti burst
+      const duration = 3000;
+      const end = Date.now() + duration;
+
+      const frame = () => {
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: ['#f97316', '#1e3a5f', '#22c55e']
+        });
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: ['#f97316', '#1e3a5f', '#22c55e']
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      };
+      frame();
     }
   };
 
@@ -392,6 +419,7 @@ export default function DayPage() {
 
         {/* Success State */}
         {submitted && (
+            <>
           <div className="bg-green-50 border border-green-200 rounded-2xl p-6 text-center">
             <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
               <CheckCircle2 className="w-8 h-8 text-green-600" />
@@ -408,13 +436,35 @@ export default function DayPage() {
                 LinkedIn
               </a>
             </div>
-            <Link 
+                        <Link 
               href="/dashboard"
               className="block mt-4 text-green-700 text-sm font-medium"
             >
               Back to Dashboard
             </Link>
           </div>
+          
+          {/* Next Day Preview */}
+          <div className={`rounded-2xl p-5 mt-4 ${nightMode ? 'bg-[#1e293b]' : 'bg-white'} shadow-sm border-l-4 border-[#1e3a5f]`}>
+            <p className={`text-[10px] font-medium uppercase tracking-wider mb-2 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
+              Coming Up Tomorrow
+            </p>
+            <h3 className={`font-bold text-base mb-1 ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>
+              Build a Contact Form with Validation
+            </h3>
+            <p className={`text-xs ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>
+              Day {dayId + 1} of 60 • Medium difficulty
+            </p>
+            <div className="flex items-center gap-2 mt-3">
+              <span className={`text-[10px] px-2 py-1 rounded-full ${nightMode ? 'bg-slate-800 text-slate-300' : 'bg-[#f8fafc] text-[#64748b]'}`}>
+                React Hook Form
+              </span>
+              <span className={`text-[10px] px-2 py-1 rounded-full ${nightMode ? 'bg-slate-800 text-slate-300' : 'bg-[#f8fafc] text-[#64748b]'}`}>
+                Zod Validation
+              </span>
+            </div>
+          </div>
+          </>
         )}
       </div>
 
