@@ -52,11 +52,34 @@ export default function DayPage() {
   const isToday = dayId === student.currentDay;
   const alreadySubmitted = student.submissions.some(s => s.day === dayId);
   const isMissed = student.missedDays.includes(dayId);
-
+  // Celebratory sound effect using Web Audio API
+  const playSuccessSound = () => {
+    try {
+      const AudioContext = window.AudioContext || (window as any).webkitAudioContext;
+      if (!AudioContext) return;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1);
+      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2);
+      gain.gain.setValueAtTime(0.25, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.5);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.5);
+    } catch {
+      // Silently fail if audio blocked
+    }
+  };
     const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (githubUrl && linkedinUrl) {
       setSubmitted(true);
+            playSuccessSound(); // <-- ADD THIS LINE
+
       
       // Confetti burst
       const duration = 3000;
@@ -503,17 +526,18 @@ export default function DayPage() {
           <Home className="w-5 h-5" />
           <span className="text-[10px] font-medium">Home</span>
         </Link>
-<Link href={`/day/${student.currentDay}`} className="block">          <Target className="w-5 h-5" />
+        <Link href={`/day/${student.currentDay}`} className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
+          <Target className="w-5 h-5" />
           <span className="text-[10px] font-medium">Today</span>
         </Link>
         <Link href="/" className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
           <Trophy className="w-5 h-5" />
           <span className="text-[10px] font-medium">Leaderboard</span>
         </Link>
-        <div className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
+        <Link href="/profile" className={`flex flex-col items-center gap-1 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
           <User className="w-5 h-5" />
           <span className="text-[10px] font-medium">Profile</span>
-        </div>
+        </Link>
       </nav>
     </main>
   );
