@@ -140,7 +140,7 @@ const allTasksData: DayTask[] = [
     difficulty: (i % 3 === 0 ? 'Hard' : i % 3 === 1 ? 'Medium' : 'Easy') as 'Easy' | 'Medium' | 'Hard',
     description: `Advanced web development challenge for Day ${i + 15}. Push your skills further with this hands-on project.`,
     acceptanceCriteria: ['Complete the core functionality', 'Make it responsive', 'Add smooth interactions', 'Write clean, documented code'],
-    resources: [{ title: 'MDN Web Docs', url: 'https://developer.mozilla.org', type: 'documentation' }],
+    resources: [{ title: 'MDN Web Docs', url: 'https://developer.mozilla.org', type: 'documentation' as const }],
     hints: ['Break the problem into smaller parts', 'Test on mobile viewport', 'Ask in community if stuck'],
   })),
 ];
