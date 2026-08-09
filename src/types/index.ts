@@ -49,7 +49,7 @@ export interface DayTask {
 export interface Resource {
   title: string;
   url: string;
-  type: 'article' | 'video' | 'documentation';
+  type: 'article' | 'video' | 'documentation' | 'interactive';
 }
 
 export interface LeaderboardEntry {

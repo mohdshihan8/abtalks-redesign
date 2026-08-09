@@ -2,29 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+
+import { currentStudent, getTaskByDay } from '@/data/mockData';
 import BottomNav from '@/components/BottomNav';
 import {
-  Flame,
-  GitCommit,
-  ExternalLink,
-  ChevronLeft,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  BookOpen,
-  Lightbulb,
-  Send,
-  Trophy,
-  Target,
-  Home,
-  User,
-  Moon,
-  Sun,
-  Eye,
-  EyeOff,
-  RotateCcw
+  Flame, GitCommit, ExternalLink, ChevronLeft, Clock,
+  CheckCircle2, AlertCircle, BookOpen, Lightbulb, Send,
+  Trophy, Target, Home, User, Moon, Sun, Eye, EyeOff, RotateCcw
 } from 'lucide-react';
-import { currentStudent, dayTasks } from '@/data/mockData';
+
 import { useParams } from 'next/navigation';
 import confetti from 'canvas-confetti';
 
@@ -49,7 +35,7 @@ export default function DayPage() {
       setShowNightSuggestion(true);
     }
   }, []);
-  const task = dayTasks['Web Development'][0]; // Using day 12 task
+  const task = getTaskByDay(dayId); // Using day 12 task
   const isToday = dayId === student.currentDay;
   const alreadySubmitted = student.submissions.some(s => s.day === dayId);
   const isMissed = student.missedDays.includes(dayId);
@@ -502,20 +488,12 @@ export default function DayPage() {
               <p className={`text-[10px] font-medium uppercase tracking-wider mb-2 ${nightMode ? 'text-slate-400' : 'text-[#94a3b8]'}`}>
                 Coming Up Tomorrow
               </p>
-              <h3 className={`font-bold text-base mb-1 ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>
-                Build a Contact Form with Validation
-              </h3>
-              <p className={`text-xs ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>
-                Day {dayId + 1} of 60 • Medium difficulty
-              </p>
-              <div className="flex items-center gap-2 mt-3">
-                <span className={`text-[10px] px-2 py-1 rounded-full ${nightMode ? 'bg-slate-800 text-slate-300' : 'bg-[#f8fafc] text-[#64748b]'}`}>
-                  React Hook Form
-                </span>
-                <span className={`text-[10px] px-2 py-1 rounded-full ${nightMode ? 'bg-slate-800 text-slate-300' : 'bg-[#f8fafc] text-[#64748b]'}`}>
-                  Zod Validation
-                </span>
-              </div>
+                    <h3 className={`font-bold text-base mb-1 ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>
+                    {getTaskByDay(dayId + 1).title}
+                    </h3>
+                    <p className={`text-xs ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>
+                    Day {dayId + 1} of 60 • {getTaskByDay(dayId + 1).difficulty} difficulty
+                </p>  
             </div>
           </>
         )}

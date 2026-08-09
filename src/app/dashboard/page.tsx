@@ -1,6 +1,7 @@
 'use client';
 
 import BottomNav from '@/components/BottomNav';
+import { currentStudent, leaderboard, getTaskByDay } from '@/data/mockData';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
@@ -22,7 +23,6 @@ import {
   Home,
   User
 } from 'lucide-react';
-import { currentStudent, leaderboard } from '@/data/mockData';
 
 export default function DashboardPage() {
   const [nightMode, setNightMode] = useState(false);
@@ -133,8 +133,7 @@ export default function DashboardPage() {
             </div>
             <span className="text-[#f97316] font-bold text-2xl">{student.streak}</span>
           </div>
-          <p className={`text-xs mb-3 ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>{getStreakMessage()}</p>
-          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
+<p className={`text-xs mb-3 ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>{getStreakMessage()}</p>          <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
             <div className="h-full bg-[#f97316] rounded-full transition-all" style={{ width: `${Math.min((student.streak / 60) * 100, 100)}%` }} />
           </div>
           <p className={`text-[10px] mt-1.5 ${nightMode ? 'text-slate-500' : 'text-[#94a3b8]'}`}>Longest: {student.longestStreak} days</p>
@@ -165,9 +164,8 @@ export default function DashboardPage() {
                 </span>
                 <ChevronRight className={`w-4 h-4 ${nightMode ? 'text-slate-500' : 'text-[#94a3b8]'}`} />
               </div>
-              <h3 className={`font-bold text-base mb-1 ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>Build a Responsive Pricing Page</h3>
-              <p className={`text-xs ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>Medium difficulty • Web Development</p>
-              <div className="flex items-center gap-4 mt-3">
+              <h3 className={`font-bold text-base mb-1 ${nightMode ? 'text-white' : 'text-[#1e3a5f]'}`}>{getTaskByDay(student.currentDay).title}</h3>
+                    <p className={`text-xs ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>{getTaskByDay(student.currentDay).difficulty} difficulty • {student.track}</p>              <div className="flex items-center gap-4 mt-3">
                 <div className="flex items-center gap-1.5">
                   <GitCommit className="w-3.5 h-3.5 text-[#22c55e]" />
                   <span className={`text-[10px] ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>GitHub</span>

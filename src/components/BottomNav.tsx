@@ -38,7 +38,7 @@ export default function BottomNav({ nightMode, activeTab, currentDay }: BottomNa
           <span className={`text-[9px] font-medium mt-0.5 ${nightMode ? 'text-slate-400' : 'text-[#64748b]'}`}>Build</span>
         </Link>
 
-        <Link href="/" className={`flex flex-col items-center gap-0.5 py-2 px-3 rounded-2xl transition-colors ${activeTab === 'leaderboard' ? activeClass : inactiveClass}`}>
+        <Link href="/leaderboard" className={`flex flex-col items-center gap-0.5 py-2 px-3 rounded-2xl transition-colors ${activeTab === 'leaderboard' ? activeClass : inactiveClass}`}>
           <Trophy className="w-5 h-5" strokeWidth={activeTab === 'leaderboard' ? 2.5 : 1.5} />
           <span className="text-[9px] font-medium">Rank</span>
         </Link>
